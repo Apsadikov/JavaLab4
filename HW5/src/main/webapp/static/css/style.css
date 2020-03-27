@@ -1,0 +1,128 @@
+body {
+    font-family: sans-serif;
+}
+
+.form {
+    margin: 100px auto 100px;
+    padding: 30px 80px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 0 5px 2px #ccc;
+    -moz-box-shadow: 0 0 5px 2px #ccc;
+    box-shadow: 0 0 5px 2px #ccc;
+}
+
+.input {
+    margin-top: 10px;
+}
+
+.send {
+    margin: 30px auto 0;
+    display: block;
+    background: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 40px;
+    outline: none;
+}
+
+.form-name {
+    text-align: center;
+    font-size: 18px;
+    margin: 10px auto 40px;
+}
+
+.content {
+    max-width: 960px;
+    margin: auto;
+    height: 100px;
+}
+
+.user-info, .add-note, .notes {
+    border: 1px solid #eeeeee;
+    border-radius: 5px;
+    margin: 30px auto 30px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.name {
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.email {
+    color: #c0c0c0;
+    margin-top: 10px;
+}
+
+.add {
+    background: #fff;
+    margin-left: auto;
+    margin-right: 0;
+    display: block;
+    margin-top: 20px;
+    border: none;
+}
+
+.reset-border-padding {
+    border: none;
+    padding: 0 10px;
+}
+
+.add-note, .notes {
+    padding: 0;
+    overflow: hidden;
+}
+
+.new-note, .notes-header {
+    font-weight: 600;
+    -webkit-box-shadow: 0 0 5px 2px #ccc;
+    -moz-box-shadow: 0 0 5px 2px #ccc;
+    box-shadow: 0 0 4px 1px #ccc;
+    padding: 20px;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.new-note-form {
+    padding: 20px;
+}
+
+.notes {
+    overflow: hidden;
+}
+
+.note {
+    padding: 20px;
+}
+
+.note-bottom {
+    padding: 10px;
+    border-bottom: 1px solid #ececec;
+}
+
+.open-note {
+}
+
+.like {
+    text-align: right;
+}
+
+.fa-heart, .fa-heart-o {
+    color: #dd0e19;
+}
+
+.text {
+    border-bottom: 1px solid #ececec;
+    padding-bottom: 10px;
+}
+
+.likes {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+.fa-pencil {
+    color: #cccccc;
+    margin-right: 10px;
+}
