@@ -10,82 +10,59 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import ru.itis.queue.dto.*;
-import ru.itis.queue.entity.Message;
-import ru.itis.queue.entity.Status;
-import ru.itis.queue.service.MessageService;
-import ru.itis.queue.util.UuidGenerator;
+import ru.itis.queue.protocol.JlqmServer;
 
-import java.util.HashMap;
-import java.util.Optional;
+import java.io.IOException;
 
 @Component
 @EnableWebSocket
 public class WebSocketEventHandler extends TextWebSocketHandler {
-    private final MessageService messageService;
-    private HashMap<String, WebSocketSession> consumers = new HashMap<>();
+    private JlqmServer jlqmServer;
     private ObjectMapper objectMapper;
 
     @Autowired
-    public WebSocketEventHandler(ObjectMapper objectMapper, MessageService messageService) {
+    public WebSocketEventHandler(JlqmServer jlqmServer, ObjectMapper objectMapper) {
+        this.jlqmServer = jlqmServer;
         this.objectMapper = objectMapper;
-        this.messageService = messageService;
     }
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         String command = objectMapper.readValue(message.getPayload().toString(), Command.class).getCommand();
-
         switch (command) {
             case "SUBSCRIBE":
-                Command<Subscribe> subscribe = objectMapper.readValue(message.getPayload().toString(),
+                Subscribe subscribe = objectMapper.readValue(message.getPayload().toString(),
                         new TypeReference<Command<Subscribe>>() {
-                        });
-                consumers.putIfAbsent(subscribe.getPayload().getQueueName(), session);
-                break;
-            case "GET":
-                Get getCommand = objectMapper.readValue(message.getPayload().toString(),
-                        new TypeReference<Command<Get>>() {
                         }).getPayload();
-                if (consumers.get(getCommand.getQueueName()) != null) {
-                    Optional<Message> optionalMessage = messageService.getNewMessage();
-                    if (optionalMessage.isPresent()) {
-                        Command<Message> messageCommand = new Command<>("RECEIVE", optionalMessage.get());
-                        WebSocketMessage<String> webSocketMessage =
-                                new TextMessage(objectMapper.writeValueAsString(messageCommand));
-                        consumers.get(getCommand.getQueueName()).sendMessage(webSocketMessage);
+                jlqmServer.subscribe(subscribe, text -> {
+                    if (session.isOpen()) {
+                        try {
+                            session.sendMessage(new TextMessage(text));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
+                });
                 break;
             case "SEND":
-                Send sendCommand = objectMapper.readValue(message.getPayload().toString(),
+                Send send = objectMapper.readValue(message.getPayload().toString(),
                         new TypeReference<Command<Send>>() {
                         }).getPayload();
-                Message newMessage = Message.builder()
-                        .uuid(UuidGenerator.generate())
-                        .status(Status.NEW)
-                        .body(sendCommand.getBody())
-                        .queueName(sendCommand.getQueueName())
-                        .build();
-                messageService.save(newMessage);
-                if (consumers.get(sendCommand.getQueueName()) != null) {
-                    Command<Message> messageCommand = new Command<>("RECEIVE", newMessage);
-                    WebSocketMessage<String> webSocketMessage =
-                            new TextMessage(objectMapper.writeValueAsString(messageCommand));
-                    consumers.get(sendCommand.getQueueName()).sendMessage(webSocketMessage);
-                }
+                jlqmServer.send(send);
                 break;
             case "COMPLETE":
-                CompleteMessage completeMessageCommand = objectMapper.readValue(message.getPayload().toString(),
-                        new TypeReference<Command<CompleteMessage>>() {
+                Complete complete = objectMapper.readValue(message.getPayload().toString(),
+                        new TypeReference<Command<Complete>>() {
                         }).getPayload();
-                messageService.complete(completeMessageCommand.getUuid());
+                jlqmServer.complete(complete);
                 break;
             case "ACCEPT":
-                AcceptMessage acceptMessageCommand = objectMapper.readValue(message.getPayload().toString(),
-                        new TypeReference<Command<AcceptMessage>>() {
+                Accept accept = objectMapper.readValue(message.getPayload().toString(),
+                        new TypeReference<Command<Accept>>() {
                         }).getPayload();
-                messageService.complete(acceptMessageCommand.getUuid());
+                jlqmServer.accept(accept);
                 break;
         }
     }
+
 }

@@ -18,7 +18,6 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
         webSocketHandlerRegistry
-                .addHandler(webSocketEventHandler, "/queue")
-                .withSockJS();
+                .addHandler(webSocketEventHandler, "/queue");
     }
 }

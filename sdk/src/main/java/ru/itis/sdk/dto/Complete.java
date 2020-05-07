@@ -1,4 +1,4 @@
-package ru.itis.queue.dto;
+package ru.itis.sdk.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class AcceptMessage {
+public class Complete {
     private String uuid;
 }

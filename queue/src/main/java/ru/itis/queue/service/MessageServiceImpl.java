@@ -6,8 +6,6 @@ import ru.itis.queue.entity.Message;
 import ru.itis.queue.entity.Status;
 import ru.itis.queue.repository.MessageRepository;
 
-import java.util.Optional;
-
 @Component
 public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
@@ -20,11 +18,6 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void save(Message message) {
         messageRepository.save(message);
-    }
-
-    @Override
-    public Optional<Message> getNewMessage() {
-        return messageRepository.getNewMessage();
     }
 
     @Override

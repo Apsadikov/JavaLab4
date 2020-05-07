@@ -1,7 +1,6 @@
 package ru.itis.queue.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -49,17 +48,6 @@ public class MessageRepositoryJdbcTemplateImpl implements MessageRepository {
             statement.setString(4, message.getStatus().name());
             return statement;
         });
-    }
-
-    @Override
-    public Optional<Message> getNewMessage() {
-        try {
-            Message message = jdbcTemplate
-                    .queryForObject("SELECT * FROM message WHERE status = 'NEW' LIMIT 1", messageRowMapper);
-            return Optional.of(message);
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
     }
 
     @Override
