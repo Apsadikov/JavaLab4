@@ -1,4 +1,4 @@
-package ru.itis.sdk;
+package ru.itis.sdk.example;
 
 import ru.itis.sdk.dto.Send;
 import ru.itis.sdk.protocol.connector.JlqmWebSocketConnector;
@@ -7,6 +7,17 @@ import ru.itis.sdk.protocol.producer.JlqmWebSocketProducer;
 
 public class ProducerExample {
     public static void main(String[] args) {
+        /*
+         * StompWebSocket example
+         */
+//        JlqmProducer jlqmProducer = JlqmStompWebSocketConnector.connector()
+//                .url("ws://localhost:8080/queue")
+//                .connect()
+//                .producer()
+//                .implementation(new JlqmStompWebSocketProducer())
+//                .queue("test")
+//                .start();
+
         JlqmProducer jlqmProducer = JlqmWebSocketConnector.connector()
                 .url("ws://localhost:8080/queue")
                 .connect()
