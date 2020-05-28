@@ -1,0 +1,6 @@
+GET http://localhost:8080/api/users?email=test.com
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
